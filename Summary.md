@@ -1,4 +1,4 @@
-<style TYPE="text/css">
+﻿<style TYPE="text/css">
 code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
 </style>
 <script type="text/x-mathjax-config">
@@ -485,6 +485,7 @@ Adjust figsize for entire notebook: `plt.rcParams['figure.figsize'] = [12.0, 6.0
 Copy-paste pandas table from SO: `df=pd.read_clipboard(sep='\s\s+', engine='python'); df.head()`<br>
 Group-apply-combine: `df.groupby(['col1', 'col2'])['col3'].mean()`<br>
 Two conditions mask: col A is x, col B not NaN: `df[(df['A'] == '2013') & (~pd.isnull(df['B']))]`<br>
+Split one column into two: `df['A'], df['B'] = df['AB'].str.split(' ', 1).str`
 Subplots in Matplotlib: look [here](https://stackoverflow.com/a/38438533/6220759)!!!!!!!! (`subplot2grid`)
 ***
 
