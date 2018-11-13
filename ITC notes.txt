@@ -1,0 +1,878 @@
+code for py-sql assgnmt
+
+# cmd mysql -u root -p
+
+import matplotlib
+import mysql.connector
+
+# fill in your username
+username = 'root'
+password = '1234'
+
+cnx = mysql.connector.connect(user=username, password = password, database='IMDB')
+
+# fill in your query
+query = 'Select * from imdb.movies'
+
+try:
+    # Execute the SQL command
+    cnx.cursor(query)
+    # Fetch all the rows in a list of lists.
+    results = cnx.cursor.fetchall()
+    print results
+    # results are in an array containing the content of your query.
+    # Use it as you wish ...
+
+except:
+    print "Error: unable to fetch data"
+
+cnx.close()
+
+Linux Notes
+
+grep -E is extended
+grep -o - only output
+uniq gives you unique values
+q to get out of less
+ctrl z - pause execution
+clear to clear
+
+cat file_usage | awk -F, '{print $2} END{print a/NR}' | sort | tail -10000
+
+Cheat sheet
+
+LaTex: http://math-on-quora.surge.sh/
+
+Markdown: https://markdown-helper.18f.gov/
+
+Git https://learnxinyminutes.com/docs/git/
+
+Learning How to Learn
+
+Set specific, (achievable, measurable) goals for each session and stick to them, even if it not on track - ditch what you're stuck with and move on
+
+Don't just do the minimum - invest
+Ask "am I independent?"
+
+Believe in yourself
+
+Embedded DBs
+
+sqlite3 - injection is cur.execute(inster into table (column1) values (?)), (tuple,)) - even if it's only one value it must be as a tuple
+
+remember if you create/alter something, don't do it again
+
+true/false in sql are =1 or =0
+
+~~~~~~~
+
+Standalone is a DB on a separate server, embedded is on your local machine - you run it with the process. Faster, simpler, obvs less powerful/scalable
+
+SQL or NoSQL (dicts, graphs, whatever) - HDF5 is one specifically for pandas. But Pandas loads it all in memory
+
+DDL is data definition language - create table
+DML is for modifying tables 
+
+MySQL in AWS
+
+Use mysql -u root -p to launch (don't type password, you'll be prompted)
+Ctrl-D to exit
+
+Git 
+
+OK, I think I understand a bit...each successive commit points to a previous one. A branch isn't automatically extended: it's just like a declaration of intent that you want to branch out. When you branch, only when you commit do you move in another direction. But even so, two branches could have multiple commits without any differences, so they can be merged. 
+
+The "head" is where you reside. It's detached if you haven't commited. 
+
+Checkout means to switch branches.
+
+So C1. Branch C2. Checkout C2. commit. Checkout C1, Commit goves you 2 branches, that have the ame code. Then you can merge C2 to join them.
+
+rebase is when you copy paste the history onto another branch. Doesn't really affect your code, but it affects the history, so it looks neater, it's like merging commit history
+
+This game is pretty cool
+https://learngitbranching.js.org/
+
+Python Notes
+
+Python converted at runtime to python byte code, then to c and then assembly
+
+if you use a comma in return, gives you a tuple
+default values defined in function
+
+None is a singleton in Python
+
+None == None not same as None is None (if a = 3 and b = 3, they are equal but not the same (different spaces in memory)
+
+the mainspace is __main__
+
+inside a string %d is a digit, %s is a string - if followed by % (stuff)
+
+\n is newline, you can escape or just do r before the string for 'raw'
+
+triple quotes is safest
+
+indexing strings - if you're starting at 0, more Pythonic to omit it
+0 to 6 is string[:6]
+
+[:-1] is all but the last
+[-1] is just the last
+
+dir(x) gives you all the possible methods for x
+
+help(method) tells you about a method 
+
+if split doesn't get an argument, it goes for any whitespace (space, newline, etc)
+
+point is - learn to use the interpreter, use dir and help
+
+readability, modularity
+
+docstring is returned when you do help
+
+document WHY, not HOW
+
+check on pep8online before uploading 
+
+_ gets you last command and you can operate on it
+
+x,y = 1,2 is a tuple
+x,y = y,x will swap the value
+
+set cannot contain duplicates
+dict - keys must be unique, values not
+list is mutable
+
+LESSON 2 - testing and clean code
+
+assert is a way to test - it's a boolean, nothing happens if true, if false throws AssertionError
+
+Objects
+
+id(x) or (hex(id(x)) - gives address
+In python everything is an object
+
+Small numbers (under) are stored in same place in memory! It's a python optimisation
+
+When you assign x = 1025, that gives a place in memory with that value, x is a pointer to it. If you change x x will point to somewhere else but that address will remain 1024
+
+But, if you assign x = [1,2] and then add to or otherwise change the list, the addres will remain the same. The list changes. Lists are mutable, ints are not, strings are also immutable. Dict keys are immutable
+
+Not a huge deal but docstrings are *triple double quotes* """ """
+
+Python args - (*numbers) means as many args as you want
+
+tuple times a scalar - (4,5,10)*3 
+>>(4,5,10,4,5,10,4,5,10)
+
+* means args - multiple arguments, always type is tuple
+** means kwargs (named), they're a dict
+kwargs.items() returns the keys and values in the kwargs
+
+In this  --   print_everything(one, two, *args, **kwargs)
+the first two are required args, the third is a tuple (will be blank if we don't give it input), fourth is a dict (likewise)
+
+The * is a zip - it is iterable, will unpack lists or tuples if we give
+ it as input
+
+Exceptions - like almost everything in Pytohn, exceptions are objects. You can declare x = ValueError("Hi, I'm error") and dir(x) it to see what we get
+
+You can initiate an error based on any criteria you like with "raise"
+
+You can create a new exception if you like, too ("FredException") - but in 99% of cases you don't want to do this
+
+while True:
+means run forever until "return" or "break" gets you out of it
+
+win-R (or Wox) python manuals 
+
+Windows Error is a subtype of OSError - it inherits (everything is an object!)
+
+You can also except KeyboardInterrupt
+
+try use as specific an error as possible
+maximise the "happy flow"! put tyour trys together
+
+continue means go back and continue the loop
+finally means always do this, whether exception or not
+
+context managers: with this as this...
+good for file I/O and DB connections
+(with ..... as db ......)
+spares you the open and close
+
+the exception, if relevant, will be raised during the with, so the stuff inside the CM won't be executed
+
+range vs xrange - they seem similar, but one is a generator
+
+lots of things is python are iterable: lists, strings...
+
+an iterator is something which iterates through one of these
+you can also make a list of an iterator
+
+a generator looks like a function
+
+A generator is something which can be iterated upon
+an iterator can use next()
+
+you use yieldto tell it when to stop generating. yield and then stop
+
+the advantage is lazy generation: you don't have to load everything into memory when you create it
+
+you need to use the word yield
+ 
+map doesn't do anything list comprehension can't - it's mostly deprecated. but you just need to know it b/c ppl use it a lot in old code
+
+same with filter - just use a comprehension (it's used with a function that returns true/false, and filters by that criterion
+
+reduce - applies to everything in an iterable, reduces dimension by 1
+
+lambda - create funcs
+one use case: list.sort(key = lambda x:x[1])  <-- sort by 2nd el
+
+OOP
+
+__repr__: say we have class(x). if i type x into the console, i'll get <__main__.object at 0x4536> or whatever. we can tweak this by reassigning __repr__
+
+__these__ are called slots, a whole load of them exist by default for classes
+
+private attribute - means please don't change it. (you can, but be nice and don't)
+
+
+Docker
+
+is like a mini-VM, ideal for the age of microservices
+
+Physical omputer --> VM --> Docker, runs all your programs in little self-standing, replicable Linux containers. (metaphor from the shipping container, the great unheralded invention of the last century)
+
+Usually when Linux boots up, it starts the BIOS and the BIOS starts the Kernel. That starts a process called init, usually this is PID 1 when you run ps. (the first process)
+Containers don't have this b/c they're not a full-blown VM. PID 1 in a container is the shell.
+If you open a container and run ps, you see 1 is shell and 2 is ps
+If you hit exit, it closes the shell, and the container is basically dead
+
+-t means create a terminal
+
+Linux terminal: in Linux everything is a file, the file (bash interaction) has 3 handlers: stdin, stdout and stderr. When we run a command with -d instead of -t, there's no terminal
+
+You may want to run a container nd not give it any commands, then you won't run it with -t (use -d instead). Otherwise you usually will want to use it.
+
+docker start -ai   -a attach, means it's atached to the daeomn, -i interactive means you can interact with it 
+
+## List Docker CLI commands
+docker
+docker container --help
+
+## Display Docker version and info
+docker --version
+docker version
+docker info
+
+## Execute Docker image
+docker run hello-world
+
+## List Docker images
+docker image ls
+
+## List Docker containers (running, all, all in quiet mode)
+docker container ls
+docker container ls --all
+docker container ls -aq
+
+don't use ctrl-c to exit
+
+Dockerfiles
+FROM alpine # (this line gives you a baseline to start from
+RUN some stuff
+ENV foo/bar #set up your env
+WORKDIR ${foo}
+ADD . $foo
+
+Docker will execute the file in order 
+
+Run tells it what to run at startup. For example, alpine runs sh (shell). Python:3-slim uns python shell, etc. That's what starts running when you run it 
+
+(Alt-d deletes word in shell!)
+
+Eahch line in a dockerfile is a layer. 
+RUN cd followed by 
+RUN rm won't delete a file in the folder you cd'd to
+either concatenate them or use WORKDIR to change dir
+
+docker compose lets you run mutiple services together. you write a docker-compose file in .yaml (a markup language more readable than say JSON). It lists each service and some info about it
+
+Ofir notes on Data Science
+
+Think hard at the beginning about structure. Planning a DB is half the job...
+
+recommends that we draw a DB structure
+
+TODO: normalise my stuff, add name to ID?
+
+draw.io is a Chrome tool that lets you draw stuff
+
+we'll do a redash workshop
+
+to run a python.exe from in current folder instead of default, do ./python !
+
+pip freeze tells you all installed in cuurent env
+
+SQL notes
+
+You can't use an alias in a WHERE statement
+
+Clustering - Danny Barash
+
+Ordinal means can be ordered - say, 1 to 5 stars
+then there's numeric (simple)
+and categorical (can't be ordered)
+
+Supervised learning is for predictions (labeled data)
+Unsupervised is for finding structure
+Most data in the wild is unlabeled
+
+We discussed kNN and k-means, hierarchical clustering
+
+Distance function must be positive, symmetric (same from A to B and from B to A), and must fit the triangle inequality (dist between A and B can't be greater than distance between either and C)
+
+There's also correlation distance, absolute, maximal
+
+If we have big gaps between types of objects, (socks and computers) we should normalize
+
+ Data Modeling - Eran
+
+Bias is how far away you are, variance is how big the error range is. See sides for examples. Neither is good, and they are to some extent reversely proportionate. Best is a middle point.
+
+Linear Regression
+
+for continuous data. For the simplest case (univariate), we use the mean squared error - this way we penalizes much more for farther deviations
+
+Gradient descent is based on the idea that as you move away from a max/min point, your rate of change increases. So we want to move away from this, we keep moving and comparing the difference in steps, minimising them, until we get to the smallest local move - that's a local minimum
+
+Univariate: Multivariate :: House prices by area:House prices by area, age, location...
+
+regularisation is modifying the impact of larger factors in polynomial expressions (we want our higher power thetas to have more of an impact) we multiply it by a lambda
+
+Linear regression is for a continous outcome what is y's connection to x. Logistic regression is for categorical applications: yes or no; a, b or c
+
+
+Time Series Data - Bar
+
+Just means points of a variable that change over time
+They can be Markov process (each dependent on the previous one). 
+(Some depth I found interesting: a "stochastic matrix" is a square matrix in which all columns sum to one. A probability vector is a non-negative vector that sums to one . If you multiply them, they will be steady state; you can always determine the next state by knowing the previous one. ) An example of Markov processes in everyday life is language (seems inexact though).
+
+There are various patterns: there is stationary (moving around about a point), seasonal, or cyclical (cyclical takes longer and has more ups and downs), or trend. We can analyse these and decompose the signal into its parts, and use this for modeling, predicting, and finding anomalies. 
+
+Like you have correlation between x and y, you have autocorrelation - corr between the variable and itself at an earlier point
+
+ARMA - autoregressive moving average
+Means regressing the model on itself and calculating a moving average
+
+A little more background:
+Using something called the Wold decomposition theorem we can break down the time series into seasonal (a curve, like a sine) deterministic, the trend up or down (if it isn't stationary, though we'll often convert it to stationary b/c it makes it  much easier to work on), and the random (stochastic) noise. Once we do this we can make predictions!
+
+https://stats.stackexchange.com/questions/19715/why-does-a-time-series-have-to-be-stationary 
+
+Statistics - Nadav
+
+for each point calculate prob came from norm then get proportion of false/rejected null hyp that's the pop p value
+
+P-value is the prob of everything that is at least as unlikely given H0, and is more than likely given H1
+
+p value is about protecting yourself from a very specific error, that is an error you can point to - not any kind of error. That's why we used one-tail test - we're only looking to compare H0 and H1.
+
+R is the rejection region, the areas for which the p-value is below the threshold - the values for which we reject the hyopthesis. In other words, instead of specifically calculating a sample for p-value, we're comparing the entire sample (I think this is the first HW question?)
+
+If you add two IID normally distributed variables, the sum ahs the sum of the means, the product has the product of the means.
+
+Phi is the CDF of the normal dist. Instead of calculating it, there are tables. C = Zalpha / n is basically the formula we need
+
+If we know the variance - Z-test; if not t-test
+
+NB MLE is the value of a test statistic (like mu or sigma) given a series of data points. We ask: GIVEN THIS DATA, WHAT IS THE LINE THAT FITS IT (regression)? and we answer, THIS IS THE MAXIMUM LIKELY MEAN (or whatever) FOR THE DISTRIBUTION. 
+
+The mechanics work through derivatives of the log (just to make it easier to work with, but this is less important)
+
+Information Theory
+
+we can calculate the entropy for a code based on the length of the chars (there's a formula). the entropy is the lowest possible bound. 
+
+when we talk about mutual entropy, we are saying what one set expresses about the other. it will take more information to express something about one code in terms of another.
+
+Back to basics!!!
+
+Confidence level + alpha = 1
+
+(Alpha is complement of CL)
+
+If p-value less than alpha, reject null hypothesis
+
+A high alpha level will reject a lot of true hypotheses (Type I error - reject true H0), whereas a too small alpha will accept a lot of false hypotheses (Type II error - not rejecting a false hypothesis)
+
+Linear Algebra
+
+The determinant of a matrix is the scale of it: its net effect, so to speak. It's basically multiplying everything n the matrix in a certain way. (This is probably inaccurate, but it's helpful for me.) For a 2-by-2, it's ad-cb; for a 3 by 3, it's an iterative 3-stp process
+
+If det(A) = 0, the matrix is singular (can't be inverted)
+
+Reduced row echelon form != reduced column echelon form...
+
+Trasnpose of a matrix is rotation
+The inverse, used less, is the matrix which, when multiplied by A, gives us I (the id matrix). For a symmetric matrix it's the same thing, but not always.
+
+Hidden Markov Models
+
+A markov chain moves from state to state with given probability dists between states (work/bed/gym with probs connecting each). Each one depends only on the one before, in an order 1 Markov chain. Or on the n steps before. An HMM is where we can't see all the states, only some, but we have to guess the in between states (based on prob). This is used in speech prediction (Swiftkey, can see adjacency of words but not the hidden language/semantics behind them)
+
+A mixture model is a model where the observations can be clustered into groups with different dists (ie financial market data that looks random, but when we assume some points are normal with mean x, others normal with mean y etc [mayeb pertaining to boom, bust, middle or w/e]) then they fit a clear mixture of several functions. HMM is same, but the higher order functions aren't idependent, rather they are connected - Markov chains.
+
+Terms: matrix of probabilities for each transition between states, matrix of probabilities for each emission coming from a given state, intial vector, hidden states, emmissions.
+
+Various algorithms focused onfinding different parts of model. (dist parameters, vector of states). Viterbi uses dynamic programming - tracks path backwards from origin, splitting path recrusively into subproblems. So you build a matrix V of the probabilities at each step of 
+
+Ensemble Methods - Nadav
+
+As model complexity grows, error declines - up to a point. Then it begins to climb again.
+Similarly, as model complexity grows, bias is reduced but variance begins to grow. Thus, mid-level complexity is ideal.
+Often it's best to create a model made of simpler datasets and combine them into a complex model.
+Bagging is the canonical way of creating more datasets. You generate m random datasets that look similar to your model.
+
+Anomaly Detection - Bar
+
+Fun, he did it for 2 years but finds it frustrating, don't do it!
+
+No real method, a few ideas
+statistically find the anomalies above a certain threshold. remove until all gone
+
+
+Deep Learning - Adam
+
+Gradient Descent is naive way to find minimum. But can be very slow. Also can get stuck on saddle points. And the more dimensions, the more trouble.
+
+One alternative is to take momentum into account: think of a ball rolling downhill. Prior momentum can help it overcome local minima,
+
+Nesterov momentum changes the order of calculating the step with velocity and momentum to get a slightly more optimal result
+
+Adagrad - divides by the a number that adds the squares of the y each time, so that dampens oscillations - slows us down when we're going faster, speeds us when we're going slowly
+
+RMSprop, Adadelta...Adam
+
+Backpropagation is taking the derivative of the loss function with respect to each of the components. So if we call it dz, where z is the output and w and x are the weights, we need dz.x for weight y and dz.y for weight x 
+
+@ in numpy is matrix multiplication
+
+One epoch is one pass over all the data
+Batch means that the epoch uses all of the available data
+minibatch means that it only uses part - this is to optimise, and to prevent overfitting. The smaller minibatch size gives you a more noisy result, which can be a good way to get away from saddle points. You get some of the advantages of batch descent (much quicker and more accurate), but with some of the stochasticity of SGD (since you're introducing a random starting point) to hopefully avoid saddles.
+
+Neural Nets - Eyal
+
+like logistic regression
+
+In the model we use "o" (not zero!) for the output node
+
+derivative of sigmoid is 1/1-sigmoid
+
+ws are like thetas. take in inputs and multiply by weights (plus w0 which is like theta0)
+
+do gradient descent to find optimal weights during learning
+
+we do a forward pass to calculate o, then a backward pass to adjust the weights based on our cost (J) . this is back propagation
+
+we initialise the weights at random values otherwise gets stuck
+regularise data
+
+label is binary, class is multiple. can have multi-lable and multi-class tasks
+
+for many, the loss function (cross-entropy) is the sum for each label
+
+for classes, instead of the sigmoid we use a functon called the softmax. it biases the biggest one
+
+exercise: show yourself that softmax reduces to cross-entropy in the special case of just two classes
+
+if we have multi class for multiple tasks, we have a sum of categorical crossentropy for all is and js
+
+regression's activation function is simple: o = z (score)
+multi-output regression is the same, just over each task
+
+for the intermediary activations, we've used sigmoid up until now. now we'll use reLU
+
+Before building your model, look at the data, np.unique(x, return_counts=True gives you value counts for uniques)
+
+normalise it (make everhthing out of 1) otherwise takes grad descent much longer
+
+to_categorical - out of 10 possible categories
+
+building a model is just a few lines of code in keras
+
+regularisation - L1 and L2 (abs(w) or W^2) as in regular ML, plus 'dropout' - drop a fraction of the nodes every now and then
+
+to increase reproducibility, import fixed seed for your random stuff, both in numpy and in TF. this doesn't make it 100% deterministic b/c of some hardware issues, but closer. check how your results to random changes
+
+At the beginning, you *do* want to overfit, just to establish that your model is *capable* of modeling your data. 
+
+Next step is to make sure your model *generalizes*, aka reducing overfit. Add noise, reduce df
+
+Select model (based on validation error) -> evaluate on test data
+
+Evaluation:  f1 is harmonic mean of precision and recall. ROC, AUC
+
+Viterbi algo
+
+given observations 1-k, what states 1-t produced them?
+
+go through obs, for each step get most likely transition from one before (or from start, for the first one) out of k * t possibilities
+
+leave breadcrumb trail of 'most likely prev' 
+
+then, start at the end, and retrace the trail, return it backwards
+
+Test prep - NLP with MEMM
+
+Trigram model - take MLE of this word, this word plus word i-1, and word i-2. These are just based on count of this many occurences / count of the word alone.
+
+We can associate a text with a set of tags and then ask, given a set of tags and a new text, ho can we model the log-linear prob of which tag fits each word? We can use a HMM model where we take every word with the two tags befpr it and maximise the prob. But how do w aluclate the prob? Via features. A feature is a function that asks a basic question like 'does word end in -ing? Then it's a gerund'. Binary: 1 if yes, 0 if no. Features can also look at patterns of tags, and patterns of words in the training text. We create a vector of features. Then we create a vector of parameters, which are scores, based on ow important these are. These are calculated based on Maximum Likelihood estimates. Finally we combine them into a formula using e, which makes them closer to normal numbers, to gether with a regularisation paramter which remains a log (the first log and e cancel out) so thus we have a log-linear model - one log term, one linear.
+
+Must add a regularisation lambda to prevent distortion
+
+
+Own words:
+We make 4-tuples to predict a tag: t-2, t-1, sentence, index
+X is set of all words, Y is set of all tags
+a feature f(x,y) combines the two and spits out 1 or 0
+f is vector of all features
+v is vector all PARAMETERS
+finding V is the tricky part
+V is based on Max Likelihood: find v for each x,y so that it maximises the likelihood of y for x, based on the training set. 
+
+we'll use lbfgs for this - find max v for each word
+
+Then with good v's, we can calculate words with a viterbi algo, and check accuracy with confusion matrix 
+
+First step is extract all features - (generation)
+Next is feature evaluation: we get a dict of every unique word-tag pair, and then every time we get there we'll find the word
+
+matrix is sparse in the rows, not columns - must specify this in init!!!!
+
+2 matrices - one for the hypothetical, for the optimisation
+read the docs - store v in a text file
+
+in the gradient, the empirical term doesn't depend on v, so calculate it once, not in run time - then just use it at the end
+
+lambda - start very small, go till 10, you'll find the best one
+
+difference between sentences is irrelevant
+
+separation of features - when new sentence has a **
+
+don't worry about multiprocessing
+
+for first loss term: empirical sum, dot with v - get a vector, then sum that
+
+bottom ones are vectors,top ones are scalars
+
+extended is every word with every tag
+
+for the second expression in loss func:
+take extended feat matrix, dot product with v
+then e to that power
+
+then - nb - reshape it by number of tags, so you get n_w x n_t matrix
+then sum over that so summing by tags, not words
+sum over the dimension of the tags
+then take the log
+then sum over the results
+then subtract the regul parameter
+
+for bottom, dot product will give you multiplication and summation
+p(is in small)
+don't have to test on entire set (though will help score)
+
+evaluate FV, then empirical counts
+
+once you have spec feat vect, sum over the num of ones for each vector
+
+
+TensorFlow with Assaf
+
+Many Python ML frameworks - PyTorch (FB), Caffe, TF, other smaller ones. Every company has their own
+
+EachTF session defines a graph, then executes it
+declaring something won't give you any result until you call sess.run
+
+Lazy execution, only does what's necessary, not everything in the graph
+
+try not to use constants, which are computationally expensive - stored in the graph. use them only for primtives, otherwise use variables, which you have to initialise.
+
+different sessions keep their own copies of vars
+TF.get_variables is another way to get variables
+
+placeholders - can define graph without putting in the vars, and add them later from a dict (or manually)
+
+Add a node to the TF graph to add a calculation (lijke updating weights)
+
+(Computer) Vision
+
+Light hits pupil (lens behind it), then to retina at back of eye
+Eye has rods (B/W) and cones (colour), cones fewer at periphery, therefore we see less colour then
+3 types of cones, small, medium, large, corresponding to red, green blue. Computers also use RGB for this reason.
+
+For any point in space we can draw a graph of power over wavelength - how much of each wavelength is being reflected.
+
+A camera photosensor senses only light intensity - it is a semiconductor. So how do we get colour? We use a color filter array. This is an array of filters, each blocking aall but one wavelength. So they get the amount of green, amount of red, or of blue.
+
+A bayer color filter has 2 green, 1 blue, 1 red. More green because human vision sees the most green. We then use a demosaicing algorithm  
+
+In CV, we'll use a tuple (specifically ternary - (R,G,B)) to reflect intensity of each of these three. If BW then just numbers. Either way between 0 and 255. A matrix of numbers, if colour then a 3d matrix (tensor). Each bit/tuple is a pixel. Image resolution is number of pixels. bits per pixel = bpp
+
+There's also an optional fourth channel with A, alpha - this tells the computer how to combine different layers. Hence RBGA. Different ways of implementing it
+
+Transformations
+
+1 - x flips everything, so negative image
+Gamma correction - changes every pixel following a power law (for a given level) 
+Contrast - images generally look better when intensity more or less evenly spread
+We can buil a histogram to show contrast. By spreading out the histogram, we achieve ideal exposure
+
+Equalisation
+we want to edit the histogram so that we maintain the relationship between colours, but maintain relative relationship. we normalise 
+for each channel, take the number of pixels that have this. Take cumuluative sum (np.cumsum). Then divide all by # of pixels so all is between 0 and 1. Stretch linearly to be between 0 and1, and finally multiply by 255.
+ 
+This process doesn't work for images that are mainly just black and white, say newspaper. will look blurred
+
+Lecture 2
+
+morphing grayscale to B/W. 0-255, where 0 black, higher lighter. We can pick a threshold where to split. The more natural a histogram it creates the better it will look
+Connecting neighbours: 4-con where only connected to those it's touchng, 8-con where it's connected to any edge or corner
+Mixed con is a compromise (lots of discussion about this point...basically finds points where either 4, or 8and surrounded by 0s, then it's an edge)
+
+Edge notation: compass directions are 1 to 7, we defgine an edge by a chain of 0-7 digits implying the direction that we move
+
+We can raster scan (from latin for rake: l-r all the way down) to find all black objects, use the chain code to find area/circumference, 
+
+What about orientation of object? One method is to use PCA
+
+
+Hit and misses
+Cleaning - pass a small mask over image. If it find a 1 surrounded by zeroes, set to zero. This cleans noise
+Erosion-send a mask of 1s. only output 1 if matches pattern. Reduces edges of image. the small box is called a kernel. It thus makes the objects thinner
+Dilation is the opposite of erosion.
+Morphological gradient is the combination of the two - gives you the outline of the object
+Thinning - gets the skeleton of the object. 
+Distance tranform imagines that there's a fire burning from the perimeter of the object inward. Mark every pixel with the time it takes for fire to reach it. 
+Skeleton medial axis is finding the median - the spine of the object. in addition to its outline
+
+Filtering - Convolution
+
+The Fourier Transform can work on an image as well as a signal. Instead of talking about a signal over time, we talk about a signal over frequency (of each pixel in the image). A filter takes the pixels and applies a transformation based on a certain formula across the image. 
+
+Filter can smooth or sharpen. Median filter uses only the original graylevels from the image - good for cutting out salt and pepper noise
+
+Takng the derivative of an image
+
+The gradient is a vector of the partial derivatives
+
+LaPlacian
+
+Pyramids - when we zoom in on a picture we discard some of it - a naive way is to discard every other row and column, so we lose quality. Can we do better?
+
+Yes. #Pyramids
+
+We first do a Gaussian filter (like moving a blender through your image, raster-style, mixing each image as if it were distributed in a Gaussian way around the 9 surrounding pixels. Then we do the 'remove every 2nd' thing. Another way is LaPlacian - take the difference between the smoothing and the  original (second order - looks a bit like a negative). Either way we end up with a 'pyramid' of decreasing size images.
+
+Combining two images - we take the alpha channel (transparency) of one, then of the other, and combine them. If our window is vertical the two will just be adjacent; if it's too wide we'll have a ghost of one over the other. Need Goldilocks.
+
+We can reconstruct the original from a LaPlacian with the end result and the LaPlacian pyramid - the diffrences at each stage
+
+Pyramid compression - store the Laplacean Pyramids quantized and the small image, then we can save the image taking much less space
+
+Spark
+
+Big Data can be anything from 100GB to 10PB, though technically 100GB - 100TB not really big data, could work with traditional RDBMS
+
+Machines fail. We talk about the MTBF, mean time between failures. You need to prep for it
+
+Hadoop is built on Linux FS, without an OS - just storage. Spark is the execution engine, can translate SQL into requests (SQL won't work directly since this isn't RMDB)
+Not POSIX (read/write). You write things and then they're immutable
+
+MapReduce: originated in Lisp. Google wrote a paper on it in 2004, was implemented in open source in java (Goog uses C++?)
+
+The idea is mapping and reducing: take the data, partition it between 1000s of machines, each one does a small amount of the job (map) and then you sum all of their results (reduce). The advantage is that if a machine fails or works slowly, you take that data and reassign it. Nothing is lost.
+
+Spark is on top of MapReduce, makes it much faster
+
+Basic elemnts are RDDs
+
+Functions: count, map, filter
+
+Spark is lazy: won't return an error until asked to do something with it
+
+Functional programming has risen in popularity in the last 8-10 years, because well-suited to distributed computing, b/c it is stateless, doesn't depend on (?)
+
+In Scala or Python, functions are 1st-class citizens. 
+
+RDDs can be PairRDDs: key-value (but not a hashed dict, just a list of pairs). Can rrturn with flatList
+
+Most interesting SQL jobs done with PairRDDs (group by, where, etc/)
+
+PairRDDs are just pairs, but each of those can be anything - can be a 5-tuple key and a 12-tuple value
+
+ReduceByKey always reduces the *values* by a given function
+
+Define functions! Even though you're in a notebook
+
+Sess II
+
+A Spark program (you can write and compile your own) consists of a Driver program, which runs a 'Spark Context' - which executes stuff and provides a SparkUI.
+
+We're practicing with the low-level stuff like RDDs, which is specifically slow in Python. But in general you can take your Python data science code and someone else will run it in Scala. 
+
+Can run locally (not on a cluster), much faster and good for debugging
+
+Every Israeli company using AWS uses something called a YARN. Amazon's is called EMR, it provides persistence of Spark Contexts and simplifies managing them.
+
+rdd.cache() - this tells Spark to store something. Like everything in Spark, it is lazy - won't evaluate then. But saves us execution time, because we can tell it to cache before we execute something
+
+Hive gives us SQL-like queries in Hadoop. SparkQL is the equiv for Spark. Can also add UDFs. 
+
+CNNs/ RNNs - Eyal
+
+COnvoluion comes from ImProc; it's a way of simplifying images, taking the important elements. A Gaussian blur as we say with Tamir averages, it is all positive, so all there but blurry. A sharpen has some negatives; it takes some elements away. Edge detection is almost all minuses, just gives you edges of objects.
+
+Instead of designing more filters like these. maybe we can learn the convolutions - a brilliant idea.
+
+Kernel size is usually 3x3, stride is usually 1x1
+
+The convolutional layers reduce the image to various smaller parts. Then a sigmoid/softmax gives the output, and you compare it to the label.
+
+Max pooling just takes the max
+
+You augment the image before - lots of ways to do this: eg zoo, drop part of it, rotate, flip, shear, saturation, blur, noise...different things work for different images
+
+Keras can do preprocessing but don't use it. It's got a bug, and you don't want to use it for the test
+
+RNNs ....
+ 
+Generative models - Unsupervised learning is the holy grail of ML, since labeling data is slow and expensive. We have seen tools such as PCA and Clustering, which can help pre-process. But today we will see generative networks. Create data based on a given distribution of features
+
+An autoencoder reduces itself to features and can reconstruct itself. A variable autoencoder introduces probability
+
+Information Retrieval
+
+=search. take in corpus (pl. corpora) and queries and return relevant 
+
+problems: synonymy, polysemy, ambiguity. ("which michael jordan?")
+
+Unlike DB queries, where you have structured data
+
+Boolean model - very exact, for expert users
+If you can formulate your query exactly, very powerfu
+
+We can look at intersecttion between term and query - jaccard coefficient
+
+Term frequency (TF)(bag of words) - looks at frequency, but not order. We weight it by log^freq, because appearing 10 times doesn't make it 10 times more important
+
+Also can be normalized by length of document
+
+Index Pipeline
+
+Once we talk abut large scale - instead of using a matrix, we use linked lists - more memory efficient, though now we need pointers
+
+Bigrams - expensive (even for 2, prohibitive for more)
+
+Vector Space Model
+represent docment as V-dimensional space, where v=vocabulary, documents are vectors. find angle between vectors
+
+Metrics
+
+AUC, F1, etc
+P@K - find relevance in first K results (people often just look at first page)
+
+Pagerank
+
+Different methods for traversing pages - trying to model behaviour of random surfer
+
+Monte Carlo method, iterative, matrix solution (we won't discuss this last)
+
+Workshops
+Feature Engineering - SparkBeyond
+
+Cardinality - diversity of categrical data
+high (location), low (gender)
+
+Regularisation - to avoid overfitting, add a requirement that you minimise the weights/coefficients * alpha (L1) or the coeffiecients^2 (L2) * alpha. This will cause them to be less or even zero
+
+Intel workshop
+
+Manhattan vs Euclid distance (pretty clear, straight line vs with just orizontal and vertical). Then there's also cosine distance, just meaures the gap in the angle - ignores size of the vectors. Often used in NLP
+
+Pearson correlation is linear, Spearman can be any monotonic or non- correlation. Kendalls Tau is correlation between every pair in two ranked features. 
+
+Worth knowing how R works, but most things moving to Python
+
+Precision - how precise were your guesses (of your yeses, how many were right?)
+Recall - how many did you get (of the total yeses out there, how many did you get?)
+
+Accuracy - of all your guesses, how many were right?
+
+F1 - combines precision and recall in harmonic mean (2*product/sum)
+
+AUC - TPR/FPR
+
+Split before looking at the data! You shouldn't look at the feature distribution in the test set at all, you don't want to be influenced by the characteristics of the test set
+
+Check Point
+
+Look, work on this stuff a lot more. Do Kaggle comps, play with data, etc. Getting a better intuition for stats, proba, and data processing takes time.
+
+If you're trying to classify malware/non-malware , and you have a high penalty for false positives, you don't want to use 'predict' - this takes 0.5 as a threshold and classifies accordingly. You want to either regress, or use predict_proba_, and then take your own cutoff for flagging
+
+(why FP is worse than FN in Antivirus software is a counterintuitive result that is interesting on its own)
+
+Lessons from Outbrain
+
+should have: take small_train, small_test
+concatenate
+preprocess
+split
+train, test
+rerun on full set -> submit
+
+Anodot
+
+Scaling is important because of the vanishing/exploding gradient problem.  Neural nets often have activation functions that are between a narrow range (0, 1 or -1, 1) for softmax, ReLU, tanh, sigmoid etc. There is a danger of saturation - if a value is close to 0 or 1, it will settle there and never move no matter how long you train it. For that reason you want to have values robustly in the middle. That's the idea between scaling/normalizing in preprocessing
+
+Bias in statistics means that the a sample's indicator deviates from the expected statistic of the distribution it is drawn from. Thus an estimator is unbiased if its diffrence from the mean = 0. (Of course, as long as the variance != 0, it will not be identical to the original sample. For eg, weather forecasts are not identical with observed weather, but we would expect the mean error to be 0, otherwise we could systematically compensate for the bias. But the var error is not equal to 0.)
+
+DATETIME
+Managing datetime in R or Pandas (or any language) is a headache. In Pandas, a helpful rule is that if it has changed, it will be in the format YYYY-mm-DD (often the raw data is the reverse, so if it swaps you now it's worked, as an alternative to calling dtypes). Better to use df['date'] than df.date, because apparently df has an attribute called date independent of the column you named there... pd.to_datetime(series) is the same as series.astype('datetime64'). Another point of "silent failure" is if you don't do dayfirst=True - it looks normal, but when you plot it you will have these weird anomalies because it will "month-first" everything up until the 12th, and then day-first the rest
+
+Keras
+Sequential model is Model = Sequential(); model.add()....
+Functional API is x = Dense(...)(input); x = Dense(...)(x), etc
+
+An LSTM has an internal state (usually called c), and a hidden state, the output h (this is confusing!)
+
+The LSTM will return its output. If you like, you can return the output at each stage - this is the return_sequences=True flag. If you have more than one layer of LSTM then you need this.
+
+Stateful vs stateless - means that it retains memory between batches - good for time series where the sequence order between batches is important 
+
+PACF vs ACF
+ACF isn't too complicated - just think of it as modelling a linear regression where every tx is a combination of atx-1, btx-2, ctx-3, and d. etc. But what is PACF? A very simplified answer is that it is looking at the correlation between tx and tx-2, after controlling for the known ACF. In other words, disregarding the ACF and seeing what additional correlation there is beyond that.
+
+A Kalman filter is a way of finding outliers and controlling for them, used extensively by engineers in calculating trajectories for launching rockets, etc
+
+ACF and FFT (fast Fourier transform) are closely related via the Wiener-Khinchin formula, though I don't really follow the details
+
+Some stuff about NNs from Meir
+A NN is a Universal Approximator. This means that it can approximate any possible function. A better known Universal Approximator is a FFT (fast Fourier transform). A NN is basically an FFT with an activation function. (The activation function is what distinguishes it from a perceptron. Historical note: the multi-layer perceptron was invented by a guy called Rosenblatt at Cornell in the 60s, it literally used physical perception because encoding it in computer-language would have made it too slow. Perceptrons are linear, which is why they failed on any useful predictionsd - Minksy wrote a famous paper destroyng the method and it fell out of favour until Geoff Hinton (a direct descendant of George Boole!) came and invented the activation function, which adds an element of non-linearity. /history) But a Fourier function can require infinte iterations to get to a discontinuous function - a function with a break, and a sudden jump, because the sin/cos curves are continuous.
+
+Why is ReLU such a common acti function? Because it climbs slowly, it's gradient is non-flat for a long time. By contrast, the sigmoid's gradient is mostly flat. (Drawings) SGD can't have gradients hitting zero (vanishing gradient problem)
+
+The Yule-Walker equations are a way of finding the parameters of an AR(p) - ie p itself, and the coefficients for each previous timestep (ie tx = atx-1, btx-2, ctx-3 + epsilon, so we want a, b and c)
+
+Partial autocorrelation: When we analyse a time series, we first need to decide if we need to use an AR or MA model. (For instance, in MA the effect of shocks is much shorter, thanks to the averaging). We then need to estimate the parameters p and q (how many lags). Here is where calculating PACF can be helpful: if we want to use an AR(2) model, and find the PACF of p=2, the correlation should drop off very sharply after 2. (Still not totally clear on all this...)
+
+At the beginnig, we can use the Dickey-Fuller stationarity test (implemented in R). If it isn't stationary, we need to stationise it before we can use an ARIMA model.
+
+If you add a dictionary to a set, only the keys are added!
